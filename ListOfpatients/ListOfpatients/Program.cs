@@ -8,30 +8,35 @@ namespace ListOfpatients
     {
         static void Main(string[] args)
         {
+            const string commandByLastName = "1";
+            const string commandByAge = "2";
+            const string commandOnSickness = "3";
+            const string commandExit = "4";
+
             bool isWork = true;
             Hospital hospital = new Hospital();
 
             while (isWork)
             {
-                Console.WriteLine("\n1 - пациенты по фамилии\n2 - пациенты по возрасту\n3 - найти пациента по заболеванию\n4 - выход");
+                Console.WriteLine($"\n{commandByLastName} - пациенты по фамилии\n{commandByAge} - пациенты по возрасту\n{commandOnSickness} - найти пациента по заболеванию\n{commandExit} - выход");
                 string userInput = Console.ReadLine();
                 Console.Clear();
 
                 switch (userInput)
                 {
-                    case "1":
+                    case commandByLastName:
                         hospital.SortFullName();
                         break;
 
-                    case "2":
+                    case commandByAge:
                         hospital.SortAge();
                         break;
 
-                    case "3":
+                    case commandOnSickness:
                         hospital.SearchDiagnosis();
                         break;
 
-                    case "4":
+                    case commandExit:
                         isWork = false;
                         break;
 
@@ -60,11 +65,17 @@ namespace ListOfpatients
         public string Diagnosis { get; private set; }
 
         public int Age { get; private set; }
+
+        public void ShowInfo()
+        {
+            Console.WriteLine($"{Surname} {FirstName} {Patronymic} {Diagnosis} {Age}");
+        }
+        
     }
 
     class Hospital
     {
-        List<Patient> patients = new List<Patient>
+        private List<Patient> _patients = new List<Patient>
         {   new Patient("Иванов","Иван","Иванович","Диабет",15),
             new Patient("Петров","Петор","Петрович","Ожирение",25),
             new Patient("Сидоров","Владимир","Сергеевич","Кашель",25),
@@ -79,21 +90,21 @@ namespace ListOfpatients
 
         public void SortFullName()
         {
-            var fullNames = patients.OrderBy(_patients => _patients.Surname);
+            var fullNames = _patients.OrderBy(_patients => _patients.Surname);
 
             foreach (var fullName in fullNames)
             {
-                Console.WriteLine($"{fullName.Surname} {fullName.FirstName} {fullName.Patronymic}");
+                fullName.ShowInfo();
             }
         }
 
         public void SortAge()
         {
-            var ages = patients.OrderBy(patient => patient.Age);
+            var ages = _patients.OrderBy(patient => patient.Age);
 
             foreach (var age in ages)
             {
-                Console.WriteLine($"{age.Surname} {age.FirstName} {age.Patronymic} {age.Age}");
+                age.ShowInfo();
             }
         }
 
@@ -102,11 +113,11 @@ namespace ListOfpatients
             Console.WriteLine("Введите диагноз больного");
             string userInput = Console.ReadLine();
 
-            var diagnoses = patients.Where(patient => patient.Diagnosis == userInput);
+            var diagnoses = _patients.Where(patient => patient.Diagnosis == userInput);
 
             foreach (var diagnosis in diagnoses)
             {
-                Console.WriteLine($"{diagnosis.Surname} {diagnosis.FirstName} {diagnosis.Patronymic} {diagnosis.Diagnosis}");
+                diagnosis.ShowInfo();
             }
         }
     }
