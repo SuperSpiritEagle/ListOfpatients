@@ -8,35 +8,35 @@ namespace ListOfpatients
     {
         static void Main(string[] args)
         {
-            const string commandByLastName = "1";
-            const string commandByAge = "2";
-            const string commandOnSickness = "3";
-            const string commandExit = "4";
+            const string CommandByLastName = "1";
+            const string CommandByAge = "2";
+            const string CommandOnSickness = "3";
+            const string CommandExit = "4";
 
             bool isWork = true;
             Hospital hospital = new Hospital();
 
             while (isWork)
             {
-                Console.WriteLine($"\n{commandByLastName} - пациенты по фамилии\n{commandByAge} - пациенты по возрасту\n{commandOnSickness} - найти пациента по заболеванию\n{commandExit} - выход");
+                Console.WriteLine($"\n{CommandByLastName} - пациенты по фамилии\n{CommandByAge} - пациенты по возрасту\n{CommandOnSickness} - найти пациента по заболеванию\n{CommandExit} - выход");
                 string userInput = Console.ReadLine();
                 Console.Clear();
 
                 switch (userInput)
                 {
-                    case commandByLastName:
+                    case CommandByLastName:
                         hospital.SortFullName();
                         break;
 
-                    case commandByAge:
+                    case CommandByAge:
                         hospital.SortAge();
                         break;
 
-                    case commandOnSickness:
+                    case CommandOnSickness:
                         hospital.SearchDiagnosis();
                         break;
 
-                    case commandExit:
+                    case CommandExit:
                         isWork = false;
                         break;
 
@@ -92,20 +92,14 @@ namespace ListOfpatients
         {
             var fullNames = _patients.OrderBy(_patients => _patients.Surname);
 
-            foreach (var fullName in fullNames)
-            {
-                fullName.ShowInfo();
-            }
+            ShowPatientsInfo(fullNames.ToList());
         }
 
         public void SortAge()
         {
             var ages = _patients.OrderBy(patient => patient.Age);
 
-            foreach (var age in ages)
-            {
-                age.ShowInfo();
-            }
+            ShowPatientsInfo(ages.ToList());
         }
 
         public void SearchDiagnosis()
@@ -115,9 +109,15 @@ namespace ListOfpatients
 
             var diagnoses = _patients.Where(patient => patient.Diagnosis == userInput);
 
-            foreach (var diagnosis in diagnoses)
+            ShowPatientsInfo(diagnoses.ToList());
+        }
+
+        private void ShowPatientsInfo(List<Patient> patients)
+        {
+            for (int i = 0; i < patients.Count; i++)
             {
-                diagnosis.ShowInfo();
+                Console.Write($"{i + 1}. ");
+                patients[i].ShowInfo();
             }
         }
     }
